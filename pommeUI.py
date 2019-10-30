@@ -16,13 +16,19 @@ def valeur2texte(valeur):
     else:
         return val2txt[valeur]
 
+
+
+
 class Carte(pomme.Carte):
 
     def __init__(self, carte):
         self.carte = carte
 ##        texte = couleur2texte[carte.couleur] + "  " + valeur2texte(carte.valeur)
-        texte = carte.couleur.capitalize()+valeur2texte(carte.valeur)
+##        texte = carte.couleur.capitalize()+valeur2texte(carte.valeur)
+        texte = valeur2texte(carte.valeur)
         self.e = thorpy.make_button(texte)
+        img = thorpy.Image(couleur2img[carte.couleur])
+        self.e.add_elements([img])
 ##        self.e.set_main_color()
         self.e.set_font_color(couleur2couleur[carte.couleur])
         self.e.set_font_size(CARTE_FONT_SIZE)
@@ -30,6 +36,8 @@ class Carte(pomme.Carte):
         self.e.user_func = carte_func_ui
         self.e.user_params = {"c":carte}
         self.texte = texte
+        img.stick_to(self.e, "left", "left")
+        img.move((6,0))
 
     def __str__(self):
         return self.texte + " --- " + str(self.carte)
@@ -127,6 +135,21 @@ def show_anim_choose_response():
 
 
 app = thorpy.Application((800,600), "Pomme d'API")
+
+
+simg = 30
+img = thorpy.load_image("./coeur.png", colorkey=(255,255,255))
+img_coeur = thorpy.get_resized_image(img, (simg,simg))
+img = thorpy.load_image("./trefle.png", colorkey=(255,255,255))
+img_trefle = thorpy.get_resized_image(img, (simg,simg))
+img = thorpy.load_image("./pique.png", colorkey=(255,255,255))
+img_pique = thorpy.get_resized_image(img, (simg,simg))
+img = thorpy.load_image("./carreau.png", colorkey=(255,255,255))
+img_carreau = thorpy.get_resized_image(img, (simg,simg))
+img_nothing = img_carreau.copy()
+img_nothing.fill((50,50,50))
+
+couleur2img = couleur2texte = {"c":img_coeur, "p":img_pique, "l":img_carreau, "t":img_trefle, "u":img_nothing}
 
 
 jeu = pomme.Jeu()
